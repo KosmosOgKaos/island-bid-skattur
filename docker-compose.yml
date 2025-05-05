@@ -1,0 +1,19 @@
+services: 
+  database:
+    container_name: utbod-skattur-test-db
+    image: postgres:17.2
+    restart: always
+    # If you want to map the database to a local port,
+    #   if you want to use an external GUI tool for
+    #   looking into the database, for example.
+    ports:
+      - 5432:5432
+    volumes:
+      - dev:/var/lib/postgresql/data
+    environment: 
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_USER: test_user
+      POSTGRES_DB: test_database
+
+volumes:
+  dev:
