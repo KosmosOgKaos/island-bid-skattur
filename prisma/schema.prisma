@@ -82,7 +82,7 @@ model Property {
   valueName    String
   value        Float
   currency     Currency     @default(ISK)
-  properties   Json
+  properties   Json?
   submission   Submission   @relation(fields: [submissionId], references: [id])
   submissionId Int
   createdAt    DateTime     @default(now())
@@ -99,16 +99,16 @@ model Debt {
   description          String?
   type                 DebtType
   currency             Currency   @default(ISK)
-  creditor             String
-  creditorKennitala    String
-  loanNumber           String
-  loanStartDate        DateTime
-  loanDurationYears    Int
-  yearPaymentTotal     Float
-  nominalPaymentTotal  Float
+  creditor             String?
+  creditorKennitala    String?
+  loanNumber           String?
+  loanStartDate        DateTime?
+  loanDurationYears    Int?
+  yearPaymentTotal     Float?
+  nominalPaymentTotal  Float?
   interestPaymentTotal Float
   remaining            Float
-  properties           Json
+  properties           Json?
   submission           Submission @relation(fields: [submissionId], references: [id])
   submissionId         Int
   createdAt            DateTime   @default(now())
