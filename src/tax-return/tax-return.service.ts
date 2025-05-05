@@ -30,10 +30,17 @@ export class TaxReturnService {
         },
       });
 
-      return person?.submissions[0] ?? null;
+      if (!person) {
+        throw new NotFoundException('Person not found');
+      }
+
+      return person.submissions[0] ?? null;
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
       console.error('Error getting latest submission:', error);
-      return null;
+      throw error;
     }
   }
 

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TaxReturnService } from './tax-return.service';
 import { Submission } from './types/submission.types';
-import { SubmissionDto } from './dto/submission.dto';
+import { SubmissionDto } from './dto/tax-return.dto';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 
 @ApiTags('Tax Return')
