@@ -29,7 +29,7 @@ inserted_incomes AS (
         type::"IncomeType",
         payer,
         amount,
-        currency,
+        currency::"Currency",
         explanation,
         (SELECT id FROM inserted_submission),
         CURRENT_TIMESTAMP,
@@ -45,10 +45,10 @@ inserted_incomes AS (
 inserted_properties AS (
     INSERT INTO "Property" (type, "valueName", value, currency, properties, "submissionId", "createdAt", "updatedAt")
     SELECT 
-        type,
+        type::"PropertyType",
         "valueName",
         value,
-        currency,
+        currency::"Currency",
         properties,
         (SELECT id FROM inserted_submission),
         CURRENT_TIMESTAMP,
@@ -63,12 +63,12 @@ inserted_properties AS (
 INSERT INTO "Debt" (description, type, currency, creditor, "creditorKennitala", "loanNumber", "loanStartDate", "loanDurationYears", "yearPaymentTotal", "nominalPaymentTotal", "interestPaymentTotal", remaining, properties, "submissionId", "createdAt", "updatedAt")
 SELECT 
     description,
-    type,
-    currency,
+    type::"DebtType",
+    currency::"Currency",
     creditor,
     "creditorKennitala",
     "loanNumber",
-    "loanStartDate",
+    "loanStartDate"::timestamp,
     "loanDurationYears",
     "yearPaymentTotal",
     "nominalPaymentTotal",
@@ -80,9 +80,9 @@ SELECT
     CURRENT_TIMESTAMP
 FROM (VALUES 
     (NULL, 'OwnDomicile', 'ISK', 'Íslandsbanki hf.', '491008-0160', '56783900123', '2021-06-15T00:00:00Z', 30, 2280000, 1360000, 920000, 28540000, '{"domicileLocation": "Bláfjallagata 12", "yearOfPurchase": 2021}'::jsonb),
-    ('Eftirstöðvar á korti númer: 4469 88XX XXXX 4567', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, 217000, NULL, 39200, NULL),
-    ('Aukalán', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, 980000, NULL, 86000, NULL),
-    ('0142-26-732645 Varðan', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, 62000, NULL, 14500, NULL),
-    ('Kílómetragjald, Skatturinn', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, 2370, NULL, 0, NULL),
-    ('Þing- og sveitarsjóðsgjöld, Skatturinn', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 224, NULL)
+    ('Eftirstöðvar á korti númer: 4469 88XX XXXX 4567', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 39200, 217000, NULL),
+    ('Aukalán', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 86000, 980000, NULL),
+    ('0142-26-732645 Varðan', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 14500, 62000, NULL),
+    ('Kílómetragjald, Skatturinn', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2370, NULL),
+    ('Þing- og sveitarsjóðsgjöld, Skatturinn', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 224, 0, NULL)
 ) AS debts(description, type, currency, creditor, "creditorKennitala", "loanNumber", "loanStartDate", "loanDurationYears", "yearPaymentTotal", "nominalPaymentTotal", "interestPaymentTotal", remaining, properties);
