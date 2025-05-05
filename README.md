@@ -28,7 +28,18 @@
 ## Project setup
 
 ```bash
+# Install dependencies
 $ yarn install
+
+# Set up environment variables
+$ cp .env.example .env  # If you have an example env file
+# Edit .env with your database credentials
+
+# Generate Prisma client
+$ npx prisma generate
+
+# Start the database
+$ docker-compose up -d
 ```
 
 ## Compile and run the project
@@ -42,6 +53,19 @@ $ yarn run start:dev
 
 # production mode
 $ yarn run start:prod
+```
+
+## Database Management
+
+```bash
+# Generate Prisma client (after schema changes)
+$ npx prisma generate
+
+# Create and apply migrations
+$ npx prisma migrate dev
+
+# View database in Prisma Studio
+$ npx prisma studio
 ```
 
 ## Run tests
