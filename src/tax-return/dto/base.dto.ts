@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IncomeType, Currency, PropertyType, DebtType } from '../types/enums';
 import {
   IsString,
-  IsEmail,
   IsOptional,
   IsEnum,
   IsNumber,
@@ -16,43 +15,29 @@ import { Transform } from 'class-transformer';
 
 export class PersonDto {
   @ApiProperty({ description: 'The name of the person' })
-  @IsString()
-  @MinLength(2)
   name: string;
 
   @ApiProperty({ description: 'The Icelandic national ID number (kennitala)' })
-  @IsString()
-  @Matches(/^\d{6}-\d{4}$/, {
-    message: 'Invalid kennitala format. Must be in format XXXXXX-XXXX',
-  })
   kennitala: string;
 
   @ApiProperty({ description: 'The address of the person' })
-  @IsString()
-  @MinLength(3)
   address: string;
 
   @ApiProperty({ description: 'The email address of the person' })
-  @IsEmail()
   email: string;
 
   @ApiProperty({
     description: 'The telephone number of the person',
     required: false,
   })
-  @IsOptional()
-  @IsString()
-  @Matches(/^\+?[\d\s-]+$/, { message: 'Invalid phone number format' })
   telephone?: string;
 
   @ApiProperty({ description: 'The date when the person record was created' })
-  @IsDate()
   createdAt: Date;
 
   @ApiProperty({
     description: 'The date when the person record was last updated',
   })
-  @IsDate()
   updatedAt: Date;
 }
 
@@ -175,8 +160,8 @@ export class BaseDebtDto {
   })
   @IsOptional()
   @IsString()
-  @Matches(/^\d{6}-\d{4}$/, {
-    message: 'Invalid kennitala format. Must be in format XXXXXX-XXXX',
+  @Matches(/^\d{10}$/, {
+    message: 'Invalid kennitala format. Must be in format XXXXXXXXXX',
   })
   creditorKennitala?: string;
 
