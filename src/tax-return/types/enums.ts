@@ -17,3 +17,9 @@ export enum DebtType {
 export enum Currency {
   ISK = 'ISK',
 }
+
+export enum SubmissionStatus {
+  Imported = 'Imported',
+  Submitted = 'Submitted',
+  Finished = 'Finished',
+}
