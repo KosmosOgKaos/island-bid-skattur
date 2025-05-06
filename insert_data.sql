@@ -38,7 +38,7 @@ inserted_incomes AS (
         ('Wages', 'Norðurljós Software ehf', 9360000, 'ISK', NULL),
         ('Wages', 'Mús & Merki ehf.', 900000, 'ISK', NULL),
         ('Benefits', NULL, 120000, 'ISK', 'Dagpeningar'),
-        ('Other', 'Norðurljós Software ehf', 75000, 'ISK', 'Íþróttastyrkur')
+        ('Other', 'Norðurljós Software ehf', 75000, 'ISK', 'Íþróttastyrkur'),
         ('Other', 'VR', 130000, 'ISK', 'Starfsmenntastyrkur')
     ) AS incomes(type, payer, amount, currency, explanation)
     RETURNING id

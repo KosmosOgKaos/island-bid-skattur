@@ -1,19 +1,20 @@
-services: 
-  database:
-    container_name: utbod-skattur-test-db
-    image: postgres:17.2
-    restart: always
-    # If you want to map the database to a local port,
-    #   if you want to use an external GUI tool for
-    #   looking into the database, for example.
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    environment:
+      DATABASE_URL: 'postgresql://test_user:test_password@postgresql:5432/test_database'
     ports:
-      - 5432:5432
-    volumes:
-      - dev:/var/lib/postgresql/data
-    environment: 
+      - 3000:3000
+
+  postgresql:
+    build:
+      context: .
+      dockerfile: Dockerfile-database
+    environment:
       POSTGRES_PASSWORD: test_password
       POSTGRES_USER: test_user
       POSTGRES_DB: test_database
-
-volumes:
-  dev:
+    ports:
+      - 5432:5432
