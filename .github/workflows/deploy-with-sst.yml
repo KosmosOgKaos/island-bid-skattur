@@ -20,6 +20,7 @@ on:
       - 'Dockerfile-backend'
       - 'Dockerfile-database'
       - 'insert_data.sql'
+      - '.github/workflows/deploy-with-sst.yml'
 
 jobs:
   build-and-deploy-with-sst:
