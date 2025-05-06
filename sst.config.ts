@@ -13,6 +13,10 @@ export default $config({
     const vpc = new sst.aws.Vpc('BidTaxBackendVpc');
     const cluster = new sst.aws.Cluster('BidTaxBackendCluster', { vpc });
 
+    const POSTGRES_USER = process.env.POSTGRES_USER ?? 'test_user';
+    const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD ?? 'test_user';
+    const POSTGRES_DB = process.env.POSTGRES_DB ?? 'test_database';
+
     new sst.aws.Service('BidTaxBackendService', {
       cluster,
       containers: [
@@ -21,16 +25,26 @@ export default $config({
           image: {
             dockerfile: 'Dockerfile-backend',
           },
+          environment: {
+            DATABASE_URL: `postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}`,
+          },
         },
         {
           name: 'postgresql',
           image: {
             dockerfile: 'Dockerfile-database',
           },
+          environment: {
+            POSTGRES_PASSWORD: POSTGRES_PASSWORD,
+            POSTGRES_USER: POSTGRES_USER,
+            POSTGRES_DB: POSTGRES_DB,
+          },
         },
       ],
       loadBalancer: {
-        ports: [{ listen: '80/http', forward: '3000/http' }],
+        rules: [
+          { listen: '80/http', forward: '3000/http', container: 'backend' },
+        ],
       },
       dev: {
         command: 'yarn start:dev',
