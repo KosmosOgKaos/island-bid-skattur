@@ -17,7 +17,7 @@ import { PersonDto } from './dto/base.dto';
 export class TaxReturnController {
   constructor(private readonly taxReturnService: TaxReturnService) {}
 
-  @Get(':kennitala/submissions/latest')
+  @Get(':kennitala/latest')
   @ApiOperation({ summary: 'Get latest submission for a person' })
   @ApiResponse({
     status: 200,
@@ -34,7 +34,7 @@ export class TaxReturnController {
     return submission ? this.mapToSubmissionDto(submission) : null;
   }
 
-  @Post(':kennitala/submission')
+  @Post(':kennitala')
   @ApiOperation({ summary: 'Create a new submission for a person' })
   @ApiResponse({
     status: 201,
@@ -54,7 +54,7 @@ export class TaxReturnController {
     return this.mapToSubmissionDto(submission);
   }
 
-  @Put(':kennitala/submission/latest/finish')
+  @Put(':kennitala/latest/finish')
   @ApiOperation({ summary: 'Mark the latest submission as finished' })
   @ApiResponse({
     status: 200,
