@@ -2,9 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IncomeType, Currency, PropertyType, DebtType } from '../types/enums';
 
 export class PersonDto {
-  @ApiProperty({ description: 'The unique identifier of the person' })
-  id: number;
-
   @ApiProperty({ description: 'The name of the person' })
   name: string;
 

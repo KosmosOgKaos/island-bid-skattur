@@ -7,9 +7,6 @@ import {
 } from './base.dto';
 
 export class PersonDto {
-  @ApiProperty({ description: 'The unique identifier of the person' })
-  id: number;
-
   @ApiProperty({ description: 'The name of the person' })
   name: string;
 
@@ -38,9 +35,6 @@ export class PersonDto {
 }
 
 export class IncomeDto extends BaseIncomeDto {
-  @ApiProperty({ description: 'The unique identifier of the income record' })
-  id: number;
-
   @ApiProperty({ description: 'The date when the income record was created' })
   createdAt: Date;
 
@@ -51,9 +45,6 @@ export class IncomeDto extends BaseIncomeDto {
 }
 
 export class PropertyDto extends BasePropertyDto {
-  @ApiProperty({ description: 'The unique identifier of the property record' })
-  id: number;
-
   @ApiProperty({ description: 'The date when the property record was created' })
   createdAt: Date;
 
@@ -64,9 +55,6 @@ export class PropertyDto extends BasePropertyDto {
 }
 
 export class DebtDto extends BaseDebtDto {
-  @ApiProperty({ description: 'The unique identifier of the debt record' })
-  id: number;
-
   @ApiProperty({ description: 'The date when the debt record was created' })
   createdAt: Date;
 
@@ -77,9 +65,6 @@ export class DebtDto extends BaseDebtDto {
 }
 
 export class SubmissionDto extends BaseSubmissionDto {
-  @ApiProperty({ description: 'The unique identifier of the submission' })
-  id: string;
-
   @ApiProperty({
     description: 'List of incomes reported in this submission',
     type: [IncomeDto],
