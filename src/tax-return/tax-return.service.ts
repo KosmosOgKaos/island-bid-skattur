@@ -14,33 +14,21 @@ export class TaxReturnService {
     return 'Tax return data';
   }
 
-  async getLatestSubmission(kennitala: string): Promise<Submission | null> {
+  async getLatestSubmission(ssn: string): Promise<Submission | null> {
     try {
-      this.logger.debug(
-        `Fetching latest submission for kennitala: ${kennitala}`,
-      );
-      const person = await this.prisma.person.findUnique({
-        where: { kennitala },
+      this.logger.debug(`Fetching latest submission for kennitala: ${ssn}`);
+
+      const submission = await this.prisma.submission.findFirst({
+        where: { ssn },
+        orderBy: { index: 'desc' },
         include: {
-          submissions: {
-            orderBy: { index: 'desc' },
-            take: 1,
-            include: {
-              person: true,
-              incomes: true,
-              properties: true,
-              debts: true,
-            },
-          },
+          incomes: true,
+          properties: true,
+          debts: true,
         },
       });
 
-      if (!person) {
-        this.logger.warn(`Person not found with kennitala: ${kennitala}`);
-        throw new NotFoundException('Person not found');
-      }
-
-      return person.submissions[0] ?? null;
+      return submission;
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -54,29 +42,26 @@ export class TaxReturnService {
   }
 
   async createSubmission(
-    kennitala: string,
+    ssn: string,
     data: CreateSubmissionDto,
   ): Promise<Submission> {
     try {
-      this.logger.debug(`Creating new submission for kennitala: ${kennitala}`);
+      this.logger.debug(`Creating new submission for kennitala: ${ssn}`);
       // Get the latest submission index for this person
       const latestSubmission = await this.prisma.submission.findFirst({
-        where: { person: { kennitala } },
+        where: { ssn: ssn },
         orderBy: { index: 'desc' },
       });
 
       const nextIndex = (latestSubmission?.index ?? 0) + 1;
       const currentYear = new Date().getFullYear();
-
       // Create the submission with all related data
       const submission = await this.prisma.submission.create({
         data: {
           year: currentYear,
           status: SubmissionStatus.Submitted,
           index: nextIndex,
-          person: {
-            connect: { kennitala },
-          },
+          ssn: ssn,
           incomes: {
             create: data.incomes,
           },
@@ -88,7 +73,6 @@ export class TaxReturnService {
           },
         },
         include: {
-          person: true,
           incomes: true,
           properties: true,
           debts: true,
@@ -114,10 +98,9 @@ export class TaxReturnService {
         `Finishing latest submission for kennitala: ${kennitala}`,
       );
       const latestSubmission = await this.prisma.submission.findFirst({
-        where: { person: { kennitala } },
+        where: { ssn: kennitala },
         orderBy: { index: 'desc' },
         include: {
-          person: true,
           incomes: true,
           properties: true,
           debts: true,
@@ -133,7 +116,6 @@ export class TaxReturnService {
         where: { id: latestSubmission.id },
         data: { status: SubmissionStatus.Finished },
         include: {
-          person: true,
           incomes: true,
           properties: true,
           debts: true,

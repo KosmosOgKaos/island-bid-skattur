@@ -18,15 +18,8 @@ export type Debt = Prisma.DebtGetPayload<{
   };
 }>;
 
-export type Person = Prisma.PersonGetPayload<{
-  include: {
-    submissions: true;
-  };
-}>;
-
 export type Submission = Prisma.SubmissionGetPayload<{
   include: {
-    person: true;
     incomes: true;
     properties: true;
     debts: true;

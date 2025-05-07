@@ -8,6 +8,7 @@ export class CreatePropertyDto extends BasePropertyDto {}
 export class CreateDebtDto extends BaseDebtDto {}
 
 export class CreateSubmissionDto {
+
   @ApiProperty({
     description: 'List of incomes to be reported in this submission',
     type: [CreateIncomeDto],

@@ -6,34 +6,6 @@ import {
   BaseSubmissionDto,
 } from './base.dto';
 
-export class PersonDto {
-  @ApiProperty({ description: 'The name of the person' })
-  name: string;
-
-  @ApiProperty({ description: 'The Icelandic national ID number (kennitala)' })
-  kennitala: string;
-
-  @ApiProperty({ description: 'The address of the person' })
-  address: string;
-
-  @ApiProperty({ description: 'The email address of the person' })
-  email: string;
-
-  @ApiProperty({
-    description: 'The telephone number of the person',
-    required: false,
-  })
-  telephone?: string;
-
-  @ApiProperty({ description: 'The date when the person record was created' })
-  createdAt: Date;
-
-  @ApiProperty({
-    description: 'The date when the person record was last updated',
-  })
-  updatedAt: Date;
-}
-
 export class IncomeDto extends BaseIncomeDto {
   @ApiProperty({ description: 'The date when the income record was created' })
   createdAt: Date;
@@ -65,6 +37,12 @@ export class DebtDto extends BaseDebtDto {
 }
 
 export class SubmissionDto extends BaseSubmissionDto {
+  @ApiProperty({
+    description: 'The status of the submission',
+    enum: ['Imported', 'Submitted', 'Finished'],
+  })
+  status: 'Imported' | 'Submitted' | 'Finished';
+
   @ApiProperty({
     description: 'List of incomes reported in this submission',
     type: [IncomeDto],

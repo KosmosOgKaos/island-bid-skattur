@@ -14,26 +14,12 @@ CREATE TYPE "PropertyType" AS ENUM ('DomesticProperty', 'Vehicle');
 CREATE TYPE "DebtType" AS ENUM ('OwnDomicile', 'Other');
 
 -- CreateTable
-CREATE TABLE "Person" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "kennitala" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "telephone" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Person_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Submission" (
     "id" SERIAL NOT NULL,
     "year" INTEGER NOT NULL,
     "status" "SubmissionStatus" NOT NULL,
     "index" INTEGER NOT NULL,
-    "personId" INTEGER NOT NULL,
+    "ssn" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -94,13 +80,7 @@ CREATE TABLE "Debt" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Person_kennitala_key" ON "Person"("kennitala");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Submission_personId_year_index_key" ON "Submission"("personId", "year", "index");
-
--- AddForeignKey
-ALTER TABLE "Submission" ADD CONSTRAINT "Submission_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+CREATE UNIQUE INDEX "Submission_ssn_year_index_key" ON "Submission"("ssn", "year", "index");
 
 -- AddForeignKey
 ALTER TABLE "Income" ADD CONSTRAINT "Income_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "Submission"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
