@@ -48,13 +48,13 @@ inserted_properties AS (
     ) AS properties(type, "valueName", value, currency, properties)
     RETURNING id
 )
-INSERT INTO "Debt" (description, type, currency, creditor, "creditorKennitala", "loanNumber", "loanStartDate", "loanDurationYears", "yearPaymentTotal", "nominalPaymentTotal", "interestPaymentTotal", remaining, properties, "submissionId", "createdAt", "updatedAt")
+INSERT INTO "Debt" (description, type, currency, creditor, "creditorSsn", "loanNumber", "loanStartDate", "loanDurationYears", "yearPaymentTotal", "nominalPaymentTotal", "interestPaymentTotal", remaining, properties, "submissionId", "createdAt", "updatedAt")
 SELECT 
     description,
     type::"DebtType",
     currency::"Currency",
     creditor,
-    "creditorKennitala",
+    "creditorSsn",
     "loanNumber",
     "loanStartDate"::timestamp,
     "loanDurationYears",
@@ -73,4 +73,4 @@ FROM (VALUES
     ('0142-26-732645 Varðan', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 14500, 62000, NULL),
     ('Kílómetragjald, Skatturinn', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 2370, NULL),
     ('Þing- og sveitarsjóðsgjöld, Skatturinn', 'Other', 'ISK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 224, 0, NULL)
-) AS debts(description, type, currency, creditor, "creditorKennitala", "loanNumber", "loanStartDate", "loanDurationYears", "yearPaymentTotal", "nominalPaymentTotal", "interestPaymentTotal", remaining, properties);
+) AS debts(description, type, currency, creditor, "creditorSsn", "loanNumber", "loanStartDate", "loanDurationYears", "yearPaymentTotal", "nominalPaymentTotal", "interestPaymentTotal", remaining, properties);
