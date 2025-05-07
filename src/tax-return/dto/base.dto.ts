@@ -15,12 +15,26 @@ import { Transform } from 'class-transformer';
 
 export class BaseSubmissionDto {
   @ApiProperty({
+    description: 'The unique identifier of the submission',
+  })
+  @IsNumber()
+  @IsPositive()
+  id: number;
+
+  @ApiProperty({
     description: 'The SSN of the person to whom this submission belongs',
   })
   ssn: string;
 }
 
 export class BaseIncomeDto {
+  @ApiProperty({
+    description: 'The unique identifier of the income record',
+  })
+  @IsNumber()
+  @IsPositive()
+  id: number;
+
   @ApiProperty({
     description: 'The type of income',
     enum: IncomeType,
@@ -61,6 +75,13 @@ export class BaseIncomeDto {
 
 export class BasePropertyDto {
   @ApiProperty({
+    description: 'The unique identifier of the property record',
+  })
+  @IsNumber()
+  @IsPositive()
+  id: number;
+
+  @ApiProperty({
     description: 'The type of property',
     enum: PropertyType,
     enumName: 'PropertyType',
@@ -96,6 +117,13 @@ export class BasePropertyDto {
 }
 
 export class BaseDebtDto {
+  @ApiProperty({
+    description: 'The unique identifier of the debt record',
+  })
+  @IsNumber()
+  @IsPositive()
+  id: number;
+
   @ApiProperty({
     description: 'Description of the debt',
     required: false,

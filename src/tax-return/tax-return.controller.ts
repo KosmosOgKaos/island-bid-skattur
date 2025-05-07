@@ -67,6 +67,7 @@ export class TaxReturnController {
 
   private mapToSubmissionDto(submission: Submission): SubmissionDto {
     const incomeDtos: IncomeDto[] = submission.incomes.map((income) => ({
+      id: income.id,
       type: income.type as IncomeType,
       payer: income.payer || undefined,
       amount: income.amount,
@@ -78,6 +79,7 @@ export class TaxReturnController {
 
     const propertyDtos: PropertyDto[] = submission.properties.map(
       (property) => ({
+        id: property.id,
         type: property.type as PropertyType,
         valueName: property.valueName,
         value: property.value,
@@ -89,6 +91,7 @@ export class TaxReturnController {
     );
 
     const debtDtos: DebtDto[] = submission.debts.map((debt) => ({
+      id: debt.id,
       description: debt.description || undefined,
       type: debt.type as DebtType,
       currency: debt.currency as Currency,
@@ -107,6 +110,7 @@ export class TaxReturnController {
     }));
 
     return {
+      id: submission.id,
       ssn: submission.ssn,
       status: submission.status,
       incomes: incomeDtos,
