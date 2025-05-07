@@ -87,7 +87,7 @@ model Debt {
   type                 DebtType
   currency             Currency   @default(ISK)
   creditor             String?
-  creditorKennitala    String?
+  creditorSsn          String?
   loanNumber           String?
   loanStartDate        DateTime?
   loanDurationYears    Int?

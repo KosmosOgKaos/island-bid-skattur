@@ -135,9 +135,9 @@ export class BaseDebtDto {
   @IsOptional()
   @IsString()
   @Matches(/^\d{10}$/, {
-    message: 'Invalid kennitala format. Must be in format XXXXXXXXXX',
+    message: 'Invalid ssn format. Must be in format XXXXXXXXXX',
   })
-  creditorKennitala?: string;
+  creditorSsn?: string;
 
   @ApiProperty({
     description: 'The loan number',

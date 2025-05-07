@@ -93,7 +93,7 @@ export class TaxReturnController {
       type: debt.type as DebtType,
       currency: debt.currency as Currency,
       creditor: debt.creditor || undefined,
-      creditorKennitala: debt.creditorKennitala || undefined,
+      creditorSsn: debt.creditorSsn || undefined,
       loanNumber: debt.loanNumber || undefined,
       loanStartDate: debt.loanStartDate || undefined,
       loanDurationYears: debt.loanDurationYears || undefined,

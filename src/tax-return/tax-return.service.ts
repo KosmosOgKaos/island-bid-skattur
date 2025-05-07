@@ -16,7 +16,7 @@ export class TaxReturnService {
 
   async getLatestSubmission(ssn: string): Promise<Submission | null> {
     try {
-      this.logger.debug(`Fetching latest submission for kennitala: ${ssn}`);
+      this.logger.debug(`Fetching latest submission for ssn: ${ssn}`);
 
       const submission = await this.prisma.submission.findFirst({
         where: { ssn },
@@ -46,7 +46,7 @@ export class TaxReturnService {
     data: CreateSubmissionDto,
   ): Promise<Submission> {
     try {
-      this.logger.debug(`Creating new submission for kennitala: ${ssn}`);
+      this.logger.debug(`Creating new submission for ssn: ${ssn}`);
       // Get the latest submission index for this person
       const latestSubmission = await this.prisma.submission.findFirst({
         where: { ssn: ssn },
@@ -92,13 +92,11 @@ export class TaxReturnService {
     }
   }
 
-  async finishLatestSubmission(kennitala: string): Promise<Submission> {
+  async finishLatestSubmission(ssn: string): Promise<Submission> {
     try {
-      this.logger.debug(
-        `Finishing latest submission for kennitala: ${kennitala}`,
-      );
+      this.logger.debug(`Finishing latest submission for ssn: ${ssn}`);
       const latestSubmission = await this.prisma.submission.findFirst({
-        where: { ssn: kennitala },
+        where: { ssn: ssn },
         orderBy: { index: 'desc' },
         include: {
           incomes: true,
@@ -108,7 +106,7 @@ export class TaxReturnService {
       });
 
       if (!latestSubmission) {
-        this.logger.warn(`No submission found for kennitala: ${kennitala}`);
+        this.logger.warn(`No submission found for ssn: ${ssn}`);
         throw new NotFoundException('No submission found for this person');
       }
 

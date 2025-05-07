@@ -63,7 +63,7 @@ CREATE TABLE "Debt" (
     "type" "DebtType" NOT NULL,
     "currency" "Currency" NOT NULL DEFAULT 'ISK',
     "creditor" TEXT,
-    "creditorKennitala" TEXT,
+    "creditorSsn" TEXT,
     "loanNumber" TEXT,
     "loanStartDate" TIMESTAMP(3),
     "loanDurationYears" INTEGER,
