@@ -3,11 +3,11 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TaxReturnService } from './tax-return.service';
 import { Submission } from './types/submission.types';
 import {
-  SubmissionDto,
-  IncomeDto,
-  PropertyDto,
-  DebtDto,
-} from './dto/tax-return.dto';
+  SubmissionResponseDto,
+  IncomeResponseDto,
+  PropertyResponseDto,
+  DebtResponseDto,
+} from './dto/response.dto';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { IncomeType, PropertyType, DebtType, Currency } from './types/enums';
 
@@ -21,12 +21,12 @@ export class TaxReturnController {
   @ApiResponse({
     status: 200,
     description: 'Returns the latest submission for a person',
-    type: SubmissionDto,
+    type: SubmissionResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Person not found' })
   async getLatestSubmission(
     @Param('ssn') ssn: string,
-  ): Promise<SubmissionDto | null> {
+  ): Promise<SubmissionResponseDto | null> {
     const submission = await this.taxReturnService.getLatestSubmission(ssn);
 
     return submission ? this.mapToSubmissionDto(submission) : null;
@@ -37,14 +37,13 @@ export class TaxReturnController {
   @ApiResponse({
     status: 201,
     description: 'Returns the created submission',
-    type: SubmissionDto,
+    type: SubmissionResponseDto,
   })
-  @ApiResponse({ status: 404, description: 'Person not found' })
   @ApiResponse({ status: 400, description: 'Invalid submission data' })
   async createSubmission(
     @Param('ssn') ssn: string,
     @Body() data: CreateSubmissionDto,
-  ): Promise<SubmissionDto> {
+  ): Promise<SubmissionResponseDto> {
     const submission = await this.taxReturnService.createSubmission(ssn, data);
     return this.mapToSubmissionDto(submission);
   }
@@ -54,30 +53,30 @@ export class TaxReturnController {
   @ApiResponse({
     status: 200,
     description: 'Returns the updated submission',
-    type: SubmissionDto,
+    type: SubmissionResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Person or submission not found' })
   async finishLatestSubmission(
     @Param('ssn') ssn: string,
-  ): Promise<SubmissionDto> {
+  ): Promise<SubmissionResponseDto> {
     const submission = await this.taxReturnService.finishLatestSubmission(ssn);
 
     return this.mapToSubmissionDto(submission);
   }
 
-  private mapToSubmissionDto(submission: Submission): SubmissionDto {
-    const incomeDtos: IncomeDto[] = submission.incomes.map((income) => ({
-      id: income.id,
-      type: income.type as IncomeType,
-      payer: income.payer || undefined,
-      amount: income.amount,
-      currency: income.currency as Currency,
-      explanation: income.explanation || undefined,
-      createdAt: income.createdAt,
-      updatedAt: income.updatedAt,
-    }));
+  private mapToSubmissionDto(submission: Submission): SubmissionResponseDto {
+    const incomeDtos: IncomeResponseDto[] = submission.incomes.map(
+      (income) => ({
+        id: income.id,
+        type: income.type as IncomeType,
+        payer: income.payer || undefined,
+        amount: income.amount,
+        currency: income.currency as Currency,
+        explanation: income.explanation || undefined,
+      }),
+    );
 
-    const propertyDtos: PropertyDto[] = submission.properties.map(
+    const propertyDtos: PropertyResponseDto[] = submission.properties.map(
       (property) => ({
         id: property.id,
         type: property.type as PropertyType,
@@ -85,12 +84,10 @@ export class TaxReturnController {
         value: property.value,
         currency: property.currency as Currency,
         properties: (property.properties as Record<string, any>) || undefined,
-        createdAt: property.createdAt,
-        updatedAt: property.updatedAt,
       }),
     );
 
-    const debtDtos: DebtDto[] = submission.debts.map((debt) => ({
+    const debtDtos: DebtResponseDto[] = submission.debts.map((debt) => ({
       id: debt.id,
       description: debt.description || undefined,
       type: debt.type as DebtType,
@@ -105,8 +102,6 @@ export class TaxReturnController {
       interestPaymentTotal: debt.interestPaymentTotal,
       remaining: debt.remaining,
       properties: (debt.properties as Record<string, any>) || undefined,
-      createdAt: debt.createdAt,
-      updatedAt: debt.updatedAt,
     }));
 
     return {
@@ -116,8 +111,6 @@ export class TaxReturnController {
       incomes: incomeDtos,
       properties: propertyDtos,
       debts: debtDtos,
-      createdAt: submission.createdAt,
-      updatedAt: submission.updatedAt,
     };
   }
 }
