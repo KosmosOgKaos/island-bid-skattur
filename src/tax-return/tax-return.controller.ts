@@ -10,14 +10,13 @@ import {
 } from './dto/tax-return.dto';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { IncomeType, PropertyType, DebtType, Currency } from './types/enums';
-import { PersonDto } from './dto/base.dto';
 
 @ApiTags('Tax Return')
 @Controller('/api/tax-return')
 export class TaxReturnController {
   constructor(private readonly taxReturnService: TaxReturnService) {}
 
-  @Get(':kennitala/latest')
+  @Get(':ssn/latest')
   @ApiOperation({ summary: 'Get latest submission for a person' })
   @ApiResponse({
     status: 200,
@@ -26,15 +25,14 @@ export class TaxReturnController {
   })
   @ApiResponse({ status: 404, description: 'Person not found' })
   async getLatestSubmission(
-    @Param('kennitala') kennitala: string,
+    @Param('ssn') ssn: string,
   ): Promise<SubmissionDto | null> {
-    const submission =
-      await this.taxReturnService.getLatestSubmission(kennitala);
+    const submission = await this.taxReturnService.getLatestSubmission(ssn);
 
     return submission ? this.mapToSubmissionDto(submission) : null;
   }
 
-  @Post(':kennitala')
+  @Post(':ssn')
   @ApiOperation({ summary: 'Create a new submission for a person' })
   @ApiResponse({
     status: 201,
@@ -44,17 +42,14 @@ export class TaxReturnController {
   @ApiResponse({ status: 404, description: 'Person not found' })
   @ApiResponse({ status: 400, description: 'Invalid submission data' })
   async createSubmission(
-    @Param('kennitala') kennitala: string,
+    @Param('ssn') ssn: string,
     @Body() data: CreateSubmissionDto,
   ): Promise<SubmissionDto> {
-    const submission = await this.taxReturnService.createSubmission(
-      kennitala,
-      data,
-    );
+    const submission = await this.taxReturnService.createSubmission(ssn, data);
     return this.mapToSubmissionDto(submission);
   }
 
-  @Put(':kennitala/latest/finish')
+  @Put(':ssn/latest/finish')
   @ApiOperation({ summary: 'Mark the latest submission as finished' })
   @ApiResponse({
     status: 200,
@@ -63,25 +58,14 @@ export class TaxReturnController {
   })
   @ApiResponse({ status: 404, description: 'Person or submission not found' })
   async finishLatestSubmission(
-    @Param('kennitala') kennitala: string,
+    @Param('ssn') ssn: string,
   ): Promise<SubmissionDto> {
-    const submission =
-      await this.taxReturnService.finishLatestSubmission(kennitala);
+    const submission = await this.taxReturnService.finishLatestSubmission(ssn);
 
     return this.mapToSubmissionDto(submission);
   }
 
   private mapToSubmissionDto(submission: Submission): SubmissionDto {
-    const personDto: PersonDto = {
-      name: submission.person.name,
-      kennitala: submission.person.kennitala,
-      address: submission.person.address,
-      email: submission.person.email,
-      telephone: submission.person.telephone || undefined,
-      createdAt: submission.person.createdAt,
-      updatedAt: submission.person.updatedAt,
-    };
-
     const incomeDtos: IncomeDto[] = submission.incomes.map((income) => ({
       type: income.type as IncomeType,
       payer: income.payer || undefined,
@@ -123,7 +107,8 @@ export class TaxReturnController {
     }));
 
     return {
-      person: personDto,
+      ssn: submission.ssn,
+      status: submission.status,
       incomes: incomeDtos,
       properties: propertyDtos,
       debts: debtDtos,

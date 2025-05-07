@@ -1,26 +1,13 @@
-WITH inserted_person AS (
-    INSERT INTO "Person" (name, kennitala, address, email, telephone, "createdAt", "updatedAt")
+WITH inserted_submission AS (
+    INSERT INTO "Submission" (year, status, index, ssn, "createdAt", "updatedAt")
     VALUES (
-        'Jökull Þórðarson',
-        '1203894569',
-        'Bláfjallagata 12, 105 Reykjavík',
-        'jokull.thordarson@email.is',
-        '772-8391',
-        CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP
-    )
-    RETURNING id
-),
-inserted_submission AS (
-    INSERT INTO "Submission" (year, status, index, "personId", "createdAt", "updatedAt")
-    SELECT 
         2024,
         'Imported',
         1,
-        id,
+        '1203894569',
         CURRENT_TIMESTAMP,
         CURRENT_TIMESTAMP
-    FROM inserted_person
+    )
     RETURNING id
 ),
 inserted_incomes AS (
