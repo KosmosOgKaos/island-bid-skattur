@@ -16,9 +16,9 @@ jobs:
         with:
           node-version: 22.x
           cache: 'npm'
-      - run: npm ci
+      - run: npm i
       - run: npm run build --if-present
-      - run: npm test
+      - run: npm run test
       - run: npm run test:cov
       - name: Coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
