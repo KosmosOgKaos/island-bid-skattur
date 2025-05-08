@@ -28,7 +28,6 @@ export class TaxReturnController {
     @Param('ssn') ssn: string,
   ): Promise<SubmissionResponseDto | null> {
     const submission = await this.taxReturnService.getLatestSubmission(ssn);
-
     return submission ? this.mapToSubmissionDto(submission) : null;
   }
 
